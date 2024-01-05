@@ -1,4 +1,4 @@
-package dev.luismiguelro.movies.movie;
+package dev.luismiguelro.movies.reviews;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -15,4 +15,8 @@ public class Review {
     @Id
     private ObjectId id;
     private String body;
+
+    public Review(String body) {
+        this.body = body;
+    }
 }

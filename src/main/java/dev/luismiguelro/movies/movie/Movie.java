@@ -1,5 +1,6 @@
 package dev.luismiguelro.movies.movie;
 
+import dev.luismiguelro.movies.reviews.Review;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

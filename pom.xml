@@ -25,12 +25,6 @@
             <type>jar</type>
         </dependency>
         <dependency>
-            <groupId>io.github.cdimascio</groupId>
-            <artifactId>dotenv-java</artifactId>
-            <version>3.0.0</version>
-        </dependency>
-
-        <dependency>
             <groupId>com.ngrok</groupId>
             <artifactId>ngrok-java-17</artifactId>
             <version>${ngrok.version}</version>
@@ -87,11 +81,6 @@
             <groupId>org.mongodb</groupId>
             <artifactId>bson</artifactId>
             <version>4.11.1</version>
-        </dependency>
-        <dependency>
-            <groupId>dotenv</groupId>
-            <artifactId>dotenv</artifactId>
-            <version>0.1.0</version>
         </dependency>
         <dependency>
             <groupId>com.ngrok</groupId>

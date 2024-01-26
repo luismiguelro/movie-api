@@ -16,6 +16,6 @@ public class GlobalExceptionHandler {
     public String handleGlobalException(Exception ex, Model model) {
         // Puedes personalizar el modelo y la vista para la página de error aquí
         model.addAttribute("errorMessage", ex.getMessage());
-        return "error.html"; // Esto buscará un archivo llamado "error.html" en la carpeta "public"
+        return "error.html"; // Esto buscará un archivo llamado "error.html" en la carpeta "templates"
     }
 }

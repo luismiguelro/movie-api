@@ -40,14 +40,6 @@
             <version>${ngrok.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.ngrok</groupId>
-            <artifactId>ngrok-java-native</artifactId>
-            <version>${ngrok.version}</version>
-            <!-- automatically detect classifier, you can also pin manually -->
-            <classifier>${os.detected.classifier}</classifier>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-mongodb</artifactId>
         </dependency>

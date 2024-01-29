@@ -1,5 +1,0 @@
-authtoken: 2agU2WuKnbh9U6vJ5WLxIgCmaVb_7z3frWMAzzSAzHsHpYqe5
-tunnels:
-  mytunnel:
-    addr: 8080
-    proto: http

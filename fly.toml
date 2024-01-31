@@ -1,10 +1,10 @@
-# fly.toml app configuration file generated for api-movies on 2024-01-10T11:24:26-05:00
+# fly.toml app configuration file generated for api-movies on 2024-01-31T09:43:47-05:00
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
 
-app = "api-movies"
-primary_region = "bog"
+app = 'api-movies'
+primary_region = 'bog'
 
 [build]
 
@@ -14,9 +14,9 @@ primary_region = "bog"
   auto_stop_machines = true
   auto_start_machines = true
   min_machines_running = 0
-  processes = ["app"]
+  processes = ['app']
 
 [[vm]]
-  cpu_kind = "shared"
+  cpu_kind = 'shared'
   cpus = 1
   memory_mb = 1024

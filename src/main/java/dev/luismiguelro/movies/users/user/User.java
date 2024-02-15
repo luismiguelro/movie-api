@@ -1,8 +1,9 @@
-package dev.luismiguelro.movies.users;
+package dev.luismiguelro.movies.users.user;
 
-import org.springframework.aot.generate.Generated;
+import dev.luismiguelro.movies.users.user.Role;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -28,10 +29,11 @@ public class User implements UserDetails {
     private String id;
     private String firstname;
     private String lastname;
+    @Indexed(unique = true) // Ensure email is unique
     private String email;
     private String password;
     @Enumerated(EnumType.STRING)
-    private  Role role;
+    private Role role;
 
 
     @Override

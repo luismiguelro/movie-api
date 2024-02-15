@@ -1,6 +1,6 @@
 package dev.luismiguelro.movies.users.repository;
 
-import dev.luismiguelro.movies.users.User;
+import dev.luismiguelro.movies.users.user.User;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import java.util.Optional;
 

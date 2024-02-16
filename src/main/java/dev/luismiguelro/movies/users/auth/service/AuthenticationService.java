@@ -18,38 +18,53 @@ import org.springframework.stereotype.Service;
 public class AuthenticationService {
     private final UserRepository repository;
     private final PasswordEncoder passwordEncoder;
-    //generate Token
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
-    public AuthenticationResponse register(RegisterRequest request) {
-        var user = User.builder()
+
+    public AuthenticationResponse register(RegisterRequest request) throws Exception {
+        validateEmailNotInUse(request.getEmail());
+
+        User user = buildUserFromRequest(request);
+        repository.save(user);
+
+        String jwtToken = jwtService.generateToken(user);
+
+        return buildAuthenticationResponse(jwtToken);
+    }
+
+    public AuthenticationResponse authenticate(AuthenticationRequest request) {
+        authenticateUser(request.getEmail(), request.getPassword());
+
+        User user = repository.findByEmail(request.getEmail()).orElseThrow();
+        String jwtToken = jwtService.generateToken(user);
+
+        return buildAuthenticationResponse(jwtToken);
+    }
+
+    private void validateEmailNotInUse(String email) throws Exception {
+        if (repository.findByEmail(email).isPresent()) {
+            throw new Exception("El correo electrónico ya está en uso");
+        }
+    }
+
+    private User buildUserFromRequest(RegisterRequest request) {
+        return User.builder()
                 .firstname(request.getFirstname())
                 .lastname(request.getLastName())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role(Role.USER)
                 .build();
-        repository.save(user);
-        var jwtToken = jwtService.generateToken(user);
-        return AuthenticationResponse
-                .builder()
-                .token(jwtToken)
-                .build();
     }
 
-    public AuthenticationResponse authenticate(AuthenticationRequest request) {
+    private void authenticateUser(String email, String password) {
         authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                      request.getEmail(),
-                      request.getPassword()
-                )
+                new UsernamePasswordAuthenticationToken(email, password)
         );
-        var user = repository
-                .findByEmail(request.getEmail())
-                .orElseThrow();
-        String jwtToken = jwtService.generateToken(user);
-        return AuthenticationResponse
-                .builder()
+    }
+
+    private AuthenticationResponse buildAuthenticationResponse(String jwtToken) {
+        return AuthenticationResponse.builder()
                 .token(jwtToken)
                 .build();
     }

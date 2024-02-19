@@ -50,7 +50,7 @@ public class AuthenticationService {
     private User buildUserFromRequest(RegisterRequest request) {
         return User.builder()
                 .firstname(request.getFirstname())
-                .lastname(request.getLastName())
+                .lastname(request.getLastname())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role(Role.USER)

@@ -9,12 +9,12 @@ import org.springframework.http.HttpStatus;
 
 @ControllerAdvice
 public class ErrorController {
-
+/*
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public String handleException(Exception ex, Model model) {
         model.addAttribute("errorMessage", ex.getMessage());
         return "error"; // Esto buscará un archivo llamado "error.html" en la carpeta "templates"
-    }
+    */
 }
 

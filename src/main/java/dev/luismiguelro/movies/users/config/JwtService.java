@@ -9,14 +9,16 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
+
 @Service
 public class JwtService {
-    private static final String secretKey = System.getenv("SECRET_KEY");
+    private static final String secretKey = "iTV7espFYRZwM44FcNmJvgj55SkvIr8obvpyx8Qgkn48bfg74Sg7XT+/ebnP1i9s";
 
     public String extractUserName(String token) {
         return extractClaim(token, Claims::getSubject);
@@ -30,14 +32,15 @@ public class JwtService {
     public String generateToken(UserDetails userDetails){
         return generateToken(new HashMap<>(),userDetails);
     }
-    public String generateToken (Map<String, Object> extraClaims, UserDetails userDetails){
-        return Jwts
-                .builder()
-                .setClaims(extraClaims)
+    public String generateToken(Map<String, Object> extraClaims, UserDetails userDetails) {
+        Date tokenCreateTime = new Date();
+        Date tokenValidity = new Date(tokenCreateTime.getTime() + 1000 * 60 * 24);
+
+        return Jwts.builder()
                 .setSubject(userDetails.getUsername())
-                .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 24))
-                .signWith(getSignInKey(), SignatureAlgorithm.HS256) // experition date
+                .setClaims(extraClaims)
+                .setExpiration(tokenValidity)
+                .signWith(SignatureAlgorithm.HS256, secretKey)
                 .compact();
     }
     // validate token
@@ -61,8 +64,9 @@ public class JwtService {
                 .parseSignedClaims(token)
                 .getPayload();
     }
+
     private SecretKey getSignInKey() {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
-        return Keys.hmacShaKeyFor(keyBytes);
+        return new SecretKeySpec(keyBytes, SignatureAlgorithm.HS256.getJcaName());
     }
 }

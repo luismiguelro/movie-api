@@ -22,29 +22,30 @@ public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
 
     public AuthenticationResponse register(RegisterRequest request) throws Exception {
-        validateEmailNotInUse(request.getEmail());
+        if (isEmailNotInUse(request.getEmail())) {
+            User user = buildUserFromRequest(request);
+            repository.save(user);
 
-        User user = buildUserFromRequest(request);
-        repository.save(user);
+            String jwtToken = jwtService.generateToken(user);
 
-        String jwtToken = jwtService.generateToken(user);
-
-        return buildAuthenticationResponse(jwtToken);
+            return buildAuthenticationResponse(jwtToken);
+        } else {
+            // Manejar el caso cuando el correo electrónico ya está en uso
+            throw new Exception("El correo electrónico ya está en uso");
+        }
     }
 
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
         authenticateUser(request.getEmail(), request.getPassword());
 
-        User user = repository.findByEmail(request.getEmail()).orElseThrow();
+        var user = repository.findByEmail(request.getEmail()).orElseThrow();
         String jwtToken = jwtService.generateToken(user);
 
         return buildAuthenticationResponse(jwtToken);
     }
 
-    private void validateEmailNotInUse(String email) throws Exception {
-        if (repository.findByEmail(email).isPresent()) {
-            throw new Exception("El correo electrónico ya está en uso");
-        }
+    private boolean isEmailNotInUse(String email) {
+        return repository.findByEmail(email).isEmpty();
     }
 
     private User buildUserFromRequest(RegisterRequest request) {

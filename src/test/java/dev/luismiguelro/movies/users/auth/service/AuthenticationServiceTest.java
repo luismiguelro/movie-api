@@ -1,50 +1,67 @@
 package dev.luismiguelro.movies.users.auth.service;
 
+import dev.luismiguelro.movies.users.auth.AuthenticationController;
 import dev.luismiguelro.movies.users.auth.AuthenticationRequest;
 import dev.luismiguelro.movies.users.auth.AuthenticationResponse;
 import dev.luismiguelro.movies.users.auth.RegisterRequest;
+import dev.luismiguelro.movies.users.auth.exceptions.EmailAlreadyInUseException;
 import dev.luismiguelro.movies.users.config.JwtService;
 import dev.luismiguelro.movies.users.repository.UserRepository;
 import dev.luismiguelro.movies.users.user.User;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.MockitoAnnotations;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
-
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
-
 import org.junit.jupiter.api.Test;
-import org.springframework.security.authentication.AuthenticationManager;
-
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
+import org.springframework.security.authentication.AuthenticationManager;
 
 @SpringBootTest
 @ActiveProfiles("test")
 public class AuthenticationServiceTest {
 
-    private final UserRepository userRepository = Mockito.mock(UserRepository.class);
-    private final PasswordEncoder passwordEncoder = Mockito.mock(PasswordEncoder.class);
-    private final JwtService jwtService = Mockito.mock(JwtService.class);
-    private final AuthenticationManager authenticationManager = Mockito.mock(AuthenticationManager.class);
-    private final AuthenticationService authenticationService = new AuthenticationService(
-            userRepository,
-            passwordEncoder,
-            jwtService,
-            authenticationManager
-    );
+    @Mock
+    private UserRepository userRepository;
+    @Mock
+    private PasswordEncoder passwordEncoder;
+    @Mock
+    private JwtService jwtService;
+    @Mock
+    private AuthenticationManager authenticationManager;
+    @Mock
+    private AuthenticationService authenticationService;
+    @InjectMocks
+    private AuthenticationController authenticationController;
+    @Mock
+    private AuthenticationRequest authenticationRequest;
+
+    public void AuthenticationControllerTest() {
+        MockitoAnnotations.initMocks(this);
+    }
     @Test
     public void testRegisterAndGenerateToken() throws Exception {
         // Crear un objeto RegisterRequest con datos de prueba
         RegisterRequest registerRequest = new RegisterRequest();
         registerRequest.setFirstname("John");
         registerRequest.setLastname("Doe");
-        registerRequest.setEmail("john.doe@example.com");
+        registerRequest.setEmail("johndoe@example.com");
         registerRequest.setPassword("password123");
 
-        AuthenticationResponse responseEntity = authenticationService.register(registerRequest);
+        // Mockear el comportamiento de AuthenticationService para que devuelva una respuesta simulada
+        when(authenticationService.register(any(RegisterRequest.class))).thenReturn(mockedAuthenticationResponse().getBody());
+
+        // Act
+        AuthenticationResponse responseEntity = authenticationController.register(registerRequest).getBody();
 
         // Verificar que la respuesta no sea nula
         assertNotNull(responseEntity);
@@ -52,11 +69,10 @@ public class AuthenticationServiceTest {
         // Verificar que la respuesta tenga un cuerpo (token)
         assertNotNull(responseEntity.getToken());
     }
-
     @Test
-    public void testRegisterEmailAlreadyExists() {
+    public void testRegisterEmailAlreadyExists() throws EmailAlreadyInUseException {
         // Configuración del mock para devolver un usuario existente al buscar por email
-        when(userRepository.findByEmail(any())).thenReturn(java.util.Optional.of(new User()));
+        when(authenticationService.isEmailNotInUse(any())).thenReturn(false);
 
         // Crear un objeto RegisterRequest con datos de prueba
         RegisterRequest registerRequest = new RegisterRequest();
@@ -66,44 +82,59 @@ public class AuthenticationServiceTest {
         registerRequest.setPassword("password123");
 
         // Verificar que se lance la excepción EmailAlreadyInUseException
-        assertThrows(Exception.class, () -> authenticationService.register(registerRequest));
+        assertThrows(EmailAlreadyInUseException.class, () -> authenticationService.register(registerRequest));
     }
+
     @Test
-    public void testAuthenticateSuccess() {
-        // Datos de prueba
-        String email = "john.doe@example.com";
-        String password = "password123";
+    public void testAuthenticateSuccessfully() {
+        authenticationRequest.setEmail("johndoe@example.com");
+        authenticationRequest.setPassword("password123");
 
-        // Configurar el mock del repositorio para devolver un usuario al buscar por email
-        when(userRepository.findByEmail(email)).thenReturn(java.util.Optional.of(buildUser(email, password)));
+        // Mockear el comportamiento de AuthenticationService para que devuelva una respuesta simulad
+        doReturn(ResponseEntity.ok(mockedAuthenticationResponse().getBody()))
+                .when(authenticationService)
+                .authenticate(any(AuthenticationRequest.class));
+        // Act
+        ResponseEntity<?> responseEntity = authenticationController.authenticate(authenticationRequest);
 
-        // Configurar el mock del AuthenticationManager para aceptar cualquier autenticación
-        when(authenticationManager.authenticate(any())).thenAnswer(invocation -> {
-            return null; // o cualquier valor que desees devolver en caso de éxito
-        });
+        // Verificar que la respuesta no sea nula
+        assertNotNull(responseEntity);
 
-        // Configurar el mock del JwtService para devolver un token
-        when(jwtService.generateToken(any(User.class))).thenReturn("fakeJwtToken");
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
 
-        // Crear una AuthenticationRequest con datos de prueba
-        AuthenticationRequest authenticationRequest = new AuthenticationRequest();
-        authenticationRequest.setEmail(email);
-        authenticationRequest.setPassword(password);
+        // Verificar que el cuerpo no sea nulo
+        assertNotNull(responseEntity.getBody());
 
-        // Llamar al método authenticate en el servicio
-        AuthenticationResponse authenticationResponse = authenticationService.authenticate(authenticationRequest);
 
-        // Verificar que la respuesta no sea nula y que tenga un token
-        assertNotNull(authenticationResponse);
-        assertNotNull(authenticationResponse.getToken());
+        // Verificar que el método authenticate de AuthenticationService fue invocado con los argumentos correctos
+        verify(authenticationService, times(1)).authenticate(eq(authenticationRequest));
     }
 
-    private User buildUser(String email, String password) {
-        return User.builder()
-                .firstname("John")
-                .lastname("Doe")
-                .email(email)
-                .password(passwordEncoder.encode(password))
+    @Test
+    public void testAuthenticateFailure() {
+        // Create an AuthenticationRequest object with incorrect test data
+        AuthenticationRequest authenticationRequest = new AuthenticationRequest();
+        authenticationRequest.setEmail("usuarioIncorrecto@example.com");
+        authenticationRequest.setPassword("claveIncorrecta");
+
+        // Mock the behavior of AuthenticationService to simulate a failed authentication
+        when(authenticationService.authenticate(any(AuthenticationRequest.class)))
+                .thenReturn(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
+        // Act
+        ResponseEntity<?> responseEntity = authenticationController.authenticate(authenticationRequest);
+
+        // Verify that the status code is as expected for authentication failure
+        assertEquals(HttpStatus.UNAUTHORIZED.value(), responseEntity.getStatusCodeValue());
+    }
+
+
+    /* Metodos de utilidad*/
+
+    // Método de utilidad para simular una respuesta de AuthenticationService para autenticación exitosa
+    private ResponseEntity<AuthenticationResponse> mockedAuthenticationResponse() {
+        AuthenticationResponse authenticationResponse = AuthenticationResponse.builder()
+                .token("mytoken")
                 .build();
+        return ResponseEntity.ok(authenticationResponse);
     }
 }

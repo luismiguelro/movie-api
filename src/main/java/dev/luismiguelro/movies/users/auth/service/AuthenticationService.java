@@ -3,11 +3,14 @@ package dev.luismiguelro.movies.users.auth.service;
 import dev.luismiguelro.movies.users.auth.AuthenticationRequest;
 import dev.luismiguelro.movies.users.auth.AuthenticationResponse;
 import dev.luismiguelro.movies.users.auth.RegisterRequest;
+import dev.luismiguelro.movies.users.auth.exceptions.EmailAlreadyInUseException;
 import dev.luismiguelro.movies.users.config.JwtService;
 import dev.luismiguelro.movies.users.repository.UserRepository;
 import dev.luismiguelro.movies.users.user.Role;
 import dev.luismiguelro.movies.users.user.User;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -31,20 +34,24 @@ public class AuthenticationService {
             return buildAuthenticationResponse(jwtToken);
         } else {
             // Manejar el caso cuando el correo electrónico ya está en uso
-            throw new Exception("El correo electrónico ya está en uso");
+            throw new EmailAlreadyInUseException("El correo electrónico ya está en uso");
         }
     }
 
-    public AuthenticationResponse authenticate(AuthenticationRequest request) {
-        authenticateUser(request.getEmail(), request.getPassword());
-
-        var user = repository.findByEmail(request.getEmail()).orElseThrow();
-        String jwtToken = jwtService.generateToken(user);
-
-        return buildAuthenticationResponse(jwtToken);
+    public ResponseEntity<?> authenticate(AuthenticationRequest request) {
+        try {
+            authenticateUser(request.getEmail(), request.getPassword());
+            var user = repository.findByEmail(request.getEmail())
+                    .orElseThrow(() -> new RuntimeException("User not found"));
+            String jwtToken = jwtService.generateToken(user);
+            AuthenticationResponse response = buildAuthenticationResponse(jwtToken);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
     }
 
-    private boolean isEmailNotInUse(String email) {
+    public boolean isEmailNotInUse(String email) {
         return repository.findByEmail(email).isEmpty();
     }
 

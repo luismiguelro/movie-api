@@ -12,7 +12,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -24,30 +26,38 @@ import static org.mockito.Mockito.*;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
+
 import org.springframework.security.authentication.AuthenticationManager;
+
+import java.util.Optional;
 
 @SpringBootTest
 @ActiveProfiles("test")
 public class AuthenticationServiceTest {
 
-    @Mock
-    private UserRepository userRepository;
+    @MockBean
+    private UserRepository repository;
     @Mock
     private PasswordEncoder passwordEncoder;
-    @Mock
+    @MockBean
     private JwtService jwtService;
+
     @Mock
     private AuthenticationManager authenticationManager;
     @Mock
     private AuthenticationService authenticationService;
     @InjectMocks
     private AuthenticationController authenticationController;
+
+    @Autowired
+    private AuthenticationController authenticationController1;
     @Mock
     private AuthenticationRequest authenticationRequest;
 
     public void AuthenticationControllerTest() {
         MockitoAnnotations.initMocks(this);
     }
+
     @Test
     public void testRegisterAndGenerateToken() throws Exception {
         // Crear un objeto RegisterRequest con datos de prueba
@@ -69,25 +79,29 @@ public class AuthenticationServiceTest {
         // Verificar que la respuesta tenga un cuerpo (token)
         assertNotNull(responseEntity.getToken());
     }
-    @Test
-    public void testRegisterEmailAlreadyExists() throws EmailAlreadyInUseException {
-        // Configuración del mock para devolver un usuario existente al buscar por email
-        when(authenticationService.isEmailNotInUse(any())).thenReturn(false);
 
+    @Test
+    public void testEmailAlreadyExists() throws EmailAlreadyInUseException{
         // Crear un objeto RegisterRequest con datos de prueba
         RegisterRequest registerRequest = new RegisterRequest();
         registerRequest.setFirstname("John");
         registerRequest.setLastname("Doe");
-        registerRequest.setEmail("john.doe@example.com");
+        registerRequest.setEmail("johndoe@example.com");
         registerRequest.setPassword("password123");
 
-        // Verificar que se lance la excepción EmailAlreadyInUseException
-        assertThrows(EmailAlreadyInUseException.class, () -> authenticationService.register(registerRequest));
+        // Mockear el comportamiento de findByEmail para simular que el correo electrónico ya está en uso
+        when(repository.findByEmail("johndoe@example.com")).thenReturn(Optional.of(new User()));
+
+        // Act y Assert
+        assertThrows(EmailAlreadyInUseException.class, () -> {
+            authenticationController1.register(registerRequest);
+        });
     }
+
 
     @Test
     public void testAuthenticateSuccessfully() {
-        authenticationRequest.setEmail("johndoe@example.com");
+        authenticationRequest.setEmail("john.doe@example.com");
         authenticationRequest.setPassword("password123");
 
         // Mockear el comportamiento de AuthenticationService para que devuelva una respuesta simulad

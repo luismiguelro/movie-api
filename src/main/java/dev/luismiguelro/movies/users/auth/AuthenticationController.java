@@ -1,5 +1,6 @@
 package dev.luismiguelro.movies.users.auth;
 
+import dev.luismiguelro.movies.users.auth.exceptions.EmailAlreadyInUseException;
 import dev.luismiguelro.movies.users.auth.service.AuthenticationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -16,7 +17,7 @@ public class AuthenticationController {
     private final AuthenticationService service;
 
     @PostMapping("/register")
-    public ResponseEntity<AuthenticationResponse> register(@RequestBody RegisterRequest request) throws Exception {
+    public ResponseEntity<AuthenticationResponse> register(@RequestBody RegisterRequest request) throws EmailAlreadyInUseException {
       return ResponseEntity.ok(service.register(request));
     }
 

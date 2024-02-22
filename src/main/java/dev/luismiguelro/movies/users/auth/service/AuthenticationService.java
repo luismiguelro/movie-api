@@ -24,9 +24,9 @@ public class AuthenticationService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
-    public AuthenticationResponse register(RegisterRequest request) throws Exception {
+    public AuthenticationResponse register(RegisterRequest request) throws EmailAlreadyInUseException {
         if (isEmailNotInUse(request.getEmail())) {
-            User user = buildUserFromRequest(request);
+            var user = buildUserFromRequest(request);
             repository.save(user);
 
             String jwtToken = jwtService.generateToken(user);
@@ -51,7 +51,8 @@ public class AuthenticationService {
         }
     }
 
-    public boolean isEmailNotInUse(String email) {
+    boolean isEmailNotInUse(String email) {
+        // Implementation to check if the email is not in use
         return repository.findByEmail(email).isEmpty();
     }
 

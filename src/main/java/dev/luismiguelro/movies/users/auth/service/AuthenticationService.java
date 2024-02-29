@@ -5,7 +5,7 @@ import dev.luismiguelro.movies.users.auth.AuthenticationResponse;
 import dev.luismiguelro.movies.users.auth.RegisterRequest;
 import dev.luismiguelro.movies.users.auth.exceptions.EmailAlreadyInUseException;
 import dev.luismiguelro.movies.users.config.JwtService;
-import dev.luismiguelro.movies.users.repository.UserRepository;
+import dev.luismiguelro.movies.users.user.repository.UserRepository;
 import dev.luismiguelro.movies.users.user.Role;
 import dev.luismiguelro.movies.users.user.User;
 import lombok.RequiredArgsConstructor;

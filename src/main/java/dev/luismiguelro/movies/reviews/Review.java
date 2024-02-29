@@ -1,5 +1,6 @@
 package dev.luismiguelro.movies.reviews;
 
+import dev.luismiguelro.movies.users.user.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,8 +16,10 @@ public class Review {
     @Id
     private ObjectId id;
     private String body;
-
-    public Review(String body) {
+    private ObjectId createdBy;
+    public Review(String body, ObjectId createdBy) {
         this.body = body;
+        this.createdBy = createdBy;
     }
+
 }

@@ -2,6 +2,8 @@ package dev.luismiguelro.movies.users.user.service;
 
 import dev.luismiguelro.movies.users.user.User;
 import dev.luismiguelro.movies.users.user.repository.UserRepository;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -21,5 +23,10 @@ public class UserService {
         userRepository.findAll().forEach(users::add);
 
         return users;
+    }
+    public String getAuthenticatedUserId() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        // Obtener el ID del usuario autenticado
+        return ((User) authentication.getPrincipal()).getId();
     }
 }

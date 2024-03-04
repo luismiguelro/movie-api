@@ -1,0 +1,442 @@
+
+
+/*---------------------------------------
+  CUSTOM PROPERTIES ( VARIABLES )
+-----------------------------------------*/
+:root {
+  --white-color:                  #ffffff;
+  --primary-color:                #F8CB2E;
+  --secondary-color:              #EE5007;
+  --section-bg-color:             #f0f8ff;
+  --custom-btn-bg-color:          #EE5007;
+  --custom-btn-bg-hover-color:    #c01f27;
+  --dark-color:                   #000000;
+  --p-color:                      #717275;
+  --border-color:                 #7fffd4;
+  --link-hover-color:             #B22727;
+
+  --body-font-family:             'Outfit', sans-serif;
+
+  --h1-font-size:                 74px;
+  --h2-font-size:                 46px;
+  --h3-font-size:                 32px;
+  --h4-font-size:                 28px;
+  --h5-font-size:                 24px;
+  --h6-font-size:                 22px;
+  --p-font-size:                  18px;
+  --btn-font-size:                14px;
+  --copyright-font-size:          16px;
+
+  --border-radius-large:          100px;
+  --border-radius-medium:         20px;
+  --border-radius-small:          10px;
+
+  --font-weight-light:            300;
+  --font-weight-normal:           400;
+  --font-weight-bold:             700;
+}
+
+body {
+  background-color: var(--white-color);
+  font-family: var(--body-font-family);
+}
+
+
+
+
+h1{
+  font-weight: var(--font-weight-bold);
+}
+
+h1 {
+  font-size: var(--h1-font-size);
+}
+
+h2 {
+  font-size: var(--h2-font-size);
+}
+
+h3 {
+  font-size: var(--h3-font-size);
+}
+
+h4 {
+  font-size: var(--h4-font-size);
+}
+
+h5 {
+  font-size: var(--h5-font-size);
+}
+
+h6 {
+  font-size: var(--h6-font-size);
+}
+
+p {
+  color: var(--p-color);
+  font-size: var(--p-font-size);
+  font-weight: var(--font-weight-light);
+}
+
+ul li {
+  color: var(--p-color);
+  font-size: var(--p-font-size);
+  font-weight: var(--font-weight-light);
+}
+
+a,
+button {
+  touch-action: manipulation;
+  transition: all 0.3s;
+}
+
+a {
+  display: inline-block;
+  color: var(--primary-color);
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--link-hover-color);
+}
+
+b,
+strong {
+  font-weight: var(--font-weight-bold);
+}
+ul li{
+  color: var(--white-color);
+}
+
+
+/*---------------------------------------
+  SECTION
+-----------------------------------------*/
+.section-padding {
+  padding-top: 100px;
+  padding-bottom: 100px;
+}
+
+.section-bg {
+  background-color: var(--section-bg-color);
+}
+
+.section-overlay {
+  background-color: var(--dark-color);
+  position: absolute;
+  top: 0;
+  left: 0;
+  pointer-events: none;
+  width: 100%;
+  height: 100%;
+  opacity: 0.35;
+}
+
+.section-overlay + .container {
+  position: relative;
+}
+
+
+
+/*---------------------------------------
+  CUSTOM ICON COLOR
+-----------------------------------------*/
+.custom-icon {
+  color: var(--secondary-color);
+}
+
+
+/*---------------------------------------
+  CUSTOM BUTTON
+-----------------------------------------*/
+.custom-btn {
+  background: var(--custom-btn-bg-color);
+  border: 2px solid transparent;
+  border-radius: var(--border-radius-large);
+  color: var(--white-color);
+  font-size: var(--btn-font-size);
+  font-weight: var(--font-weight-bold);
+  line-height: normal;
+  transition: all 0.3s;
+  padding: 10px 20px;
+}
+
+.custom-btn:hover {
+  background: var(--custom-btn-bg-hover-color);
+  color: var(--white-color);
+}
+
+.custom-border-btn {
+  background: transparent;
+  border: 2px solid var(--custom-btn-bg-color);
+  color: var(--custom-btn-bg-color);
+}
+
+.navbar-expand-lg .navbar-nav .nav-link.custom-btn:hover,
+.custom-border-btn:hover {
+  background: var(--custom-btn-bg-hover-color);
+  border-color: transparent;
+  color: var(--white-color);
+}
+
+.custom-btn-bg-white {
+  border-color: var(--white-color);
+  color: var(--white-color);
+}
+
+
+/*---------------------------------------
+  VIDEO
+-----------------------------------------*/
+.video-wrap {
+  z-index: -100;
+}
+
+.custom-video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+}
+
+
+/*---------------------------------------
+  SITE HEADER
+-----------------------------------------*/
+.site-header {
+  background-color: var(--primary-color);
+  padding-top: 12px;
+  padding-bottom: 12px;
+}
+
+
+/*---------------------------------------
+  HERO
+-----------------------------------------*/
+.hero-section {
+  position: relative;
+  overflow: hidden;
+  padding-top: 100px;
+  height: calc(100vh - 51px);
+}
+
+.hero-section small {
+  color: var(--white-color);
+  text-transform: uppercase;
+}
+
+.hero-section .section-overlay {
+  z-index: 2;
+  opacity: 0.45;
+}
+
+.hero-section .container {
+  position: relative;
+  z-index: 2;
+  height: 100%;
+  padding-bottom: 50px;
+}
+
+.hero-section .container .row {
+  height: 100%;
+}
+
+
+/*---------------------------------------
+  ABOUT
+-----------------------------------------*/
+.about-section {
+  background-image: url('../images/edward-unsplash-blur.jpg');
+  background-color: #704010;
+  background-repeat: no-repeat;
+  background-size: cover;
+  position: relative;
+}
+
+.about-image {
+  border-radius: var(--border-radius-medium);
+  display: block;
+}
+
+.about-text-wrap {
+  position: relative;
+}
+
+.about-text-icon {
+  background: var(--primary-color);
+  border-radius: 100%;
+  font-size: var(--h3-font-size);
+  width: 70px;
+  height: 70px;
+  line-height: 70px;
+  text-align: center;
+}
+
+.about-text-info {
+  backdrop-filter: blur(5px) saturate(180%);
+  -webkit-backdrop-filter: blur(5px) saturate(180%);
+  background-color: rgba(255, 255, 255, 0.75);
+  border-radius: var(--border-radius-medium);
+  border: 1px solid rgba(209, 213, 219, 0.3);
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  margin: 20px;
+  padding: 35px;
+}
+
+
+/*---------------------------------------
+  SOCIAL ICON
+-----------------------------------------*/
+.social-icon {
+  margin: 0;
+  padding: 0;
+}
+
+.social-icon-item {
+  list-style: none;
+  display: inline-block;
+  vertical-align: top;
+}
+
+.social-icon-link {
+  background: var(--secondary-color);
+  border-radius: var(--border-radius-large);
+  color: var(--white-color);
+  font-size: var(--copyright-font-size);
+  display: block;
+  margin-right: 10px;
+  text-align: center;
+  width: 35px;
+  height: 35px;
+  line-height: 36px;
+  transition: background 0.2s, color 0.2s;
+}
+
+.social-icon-link:hover {
+  background: var(--primary-color);
+  color: var(--white-color);
+}
+
+.social-icon-link span {
+  display: block;
+}
+
+.social-icon-link span:hover::before{
+  animation: spinAround 2s linear infinite;
+}
+
+.copy-link-section {
+  margin-top: 20px;
+}
+
+#apiLink {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  font-size: var(--p-font-size);
+  color: var(--dark-color);
+  border: 1px solid var(--border-color);
+  border-radius: var(--border-radius-small);
+  background-color: var(--white-color);
+  text-align: center;
+}
+
+.btn-api {
+  width: 100%;
+  padding: 10px;
+}
+
+.btn.custom-btn.api:hover {
+  background: var(--custom-btn-bg-hover-color);
+  color: var(--white-color);
+}
+
+/*---------------------------------------
+  SITE FOOTER
+-----------------------------------------*/
+.footer {
+  background-color: var(--primary-color);
+  color: var(--white-color);
+}
+
+.footer p {
+  font-size: var(--p-font-size);
+}
+
+.footer a {
+  color: var(--white-color);
+}
+
+.footer a:hover {
+  color: var(--link-hover-color);
+}
+
+.social-icons .social-icon-link {
+  background: var(--secondary-color);
+  color: var(--white-color);
+}
+
+.social-icons .social-icon-link:hover {
+  background: var(--primary-color);
+  color: var(--white-color);
+}
+
+
+@keyframes spinAround {
+  from {
+    transform: rotate(0deg)
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+
+/*---------------------------------------
+  RESPONSIVE STYLES
+-----------------------------------------*/
+@media screen and (max-width: 991px) {
+  h1 {
+    font-size: 62px;
+  }
+
+  .section-padding {
+    padding-top: 50px;
+    padding-bottom: 50px;
+  }
+
+  .navbar {
+    background-color: var(--dark-color);
+  }
+
+  .navbar-expand-lg .navbar-nav {
+    padding-bottom: 30px;
+  }
+
+  .navbar-expand-lg .navbar-nav .nav-link {
+    padding: 0;
+  }
+
+  .hero-section {
+    padding-top: 150px;
+  }
+
+}
+
+@media screen and (max-width: 767px) {
+  .custom-btn {
+    font-size: 14px;
+    padding: 10px 20px;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  h1 {
+    font-size: 52px;
+  }
+}

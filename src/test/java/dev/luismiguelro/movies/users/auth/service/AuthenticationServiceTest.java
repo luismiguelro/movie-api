@@ -1,6 +1,6 @@
 package dev.luismiguelro.movies.users.auth.service;
 
-import dev.luismiguelro.movies.users.auth.AuthenticationController;
+import dev.luismiguelro.movies.users.auth.controller.AuthenticationController;
 import dev.luismiguelro.movies.users.auth.AuthenticationRequest;
 import dev.luismiguelro.movies.users.auth.AuthenticationResponse;
 import dev.luismiguelro.movies.users.auth.RegisterRequest;

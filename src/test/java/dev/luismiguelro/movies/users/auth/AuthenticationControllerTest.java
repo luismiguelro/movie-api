@@ -1,5 +1,6 @@
 package dev.luismiguelro.movies.users.auth;
 
+import dev.luismiguelro.movies.users.auth.controller.AuthenticationController;
 import dev.luismiguelro.movies.users.auth.service.AuthenticationService;
 import dev.luismiguelro.movies.users.user.repository.UserRepository;
 import org.junit.jupiter.api.Test;

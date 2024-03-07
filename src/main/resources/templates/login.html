@@ -23,6 +23,18 @@
     <link rel="stylesheet" th:href="@{/css/main.css}">
     <meta charset="UTF-8">
     <title>Login - API MOVIE</title>
+    <style>
+        .gradient-custom {
+/* fallback for old browsers */
+background: #6a11cb;
+
+/* Chrome 10-25, Safari 5.1-6 */
+background: -webkit-linear-gradient(to right, rgba(106, 17, 203, 1), rgba(37, 117, 252, 1));
+
+/* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+background: linear-gradient(to right, rgba(106, 17, 203, 1), rgba(37, 117, 252, 1))
+}
+    </style>
 </head>
 <body>
 <section class="vh-100 gradient-custom">
@@ -39,10 +51,10 @@
 
                             <form th:action="@{/api/v1/auth/authenticate}" method="post" th:object="${authenticationRequest}">
                                 <div id="errorMessage" class="alert alert danger" th:if="${param.error}">
-                                    <div class="alert" role="alert" th:text="${error}">Hola</div>
+                                   <p th:text="${error}"></p>
                                 </div>
                                 <div id="confirmationMessage" class="alert alert danger" th:if="${param.logout}">
-                                    <div class="alert" role="alert">Haz cerrado sesion!</div>
+                                    <p th:text="${error}"></p>
                                 </div>
                                 <div class="form-outline form-white mb-4">
                                     <input type="email" id="email" name="email" class="form-control form-control-lg" th:field="*{email}"  required autofocus="autofocus"/>
@@ -58,17 +70,10 @@
 
                                 <button class="btn btn-outline-light btn-lg px-5" type="submit">Login</button>
                             </form>
-
-                            <div class="d-flex justify-content-center text-center mt-4 pt-1">
-                                <a href="#!" class="text-white"><i class="fab fa-facebook-f fa-lg"></i></a>
-                                <a href="#!" class="text-white"><i class="fab fa-twitter fa-lg mx-4 px-2"></i></a>
-                                <a href="#!" class="text-white"><i class="fab fa-google fa-lg"></i></a>
-                            </div>
-
                         </div>
 
                         <div>
-                            <p class="mb-0">Don't have an account? <a th:href="@{/api/v1/auth/authenticate}" class="text-white-50 fw-bold">Sign Up</a>
+                            <p class="mb-0">Don't have an account? <a th:href="@{/api/v1/auth/register}" class="text-white-50 fw-bold">Sign Up</a>
                             </p>
                         </div>
 

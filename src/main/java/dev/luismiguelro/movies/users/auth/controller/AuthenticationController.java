@@ -60,7 +60,7 @@ public class AuthenticationController {
     @GetMapping("/login")
     public String showLoginForm(Model model) {
         model.addAttribute("authenticationRequest", new AuthenticationRequest());
-        return "login";
+        return "form";
     }
     @PostMapping("/authenticate")
     public String authenticate(@ModelAttribute("authenticationRequest") @Validated AuthenticationRequest request, Model model) {
@@ -76,7 +76,7 @@ public class AuthenticationController {
             // Si la autenticación falla, agrega un mensaje de error y vuelve a la página de inicio de sesión
             System.out.println(e);
             model.addAttribute("error", "Error de autenticación. Verifica tus credenciales.");
-            return "redirect:/api/v1/auth/login"; // Redirigir a la página de inicio de sesión con el mensaje de error
+            return "redirect:/api/v1/auth/login?eror"; // Redirigir a la página de inicio de sesión con el mensaje de error
         }
     }
     public ResponseEntity<AuthenticationResponse> register(RegisterRequest registerRequest) {

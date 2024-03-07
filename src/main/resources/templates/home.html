@@ -1,6 +1,7 @@
 <!doctype html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
-
+<html xmlns:th="http://www.thymeleaf.org/"
+      xmlns="http://www.w3.org/1999/xhtml" lang="en" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.thymeleaf.org ">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -9,8 +10,6 @@
     <meta name="author" content="">
 
     <title>API de Películas con Spring Boot</title>
-
-    <!-- CSS FILES -->
     <!-- Enlazar a la fuente Google Montserrat -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap">
 
@@ -30,13 +29,13 @@
             integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
             crossorigin="anonymous">
     </script>
-    <link href="css/main.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/main.css}">
 </head>
 
 <body>
 
 <main>
-    <div th:replace="constants/header :: header"></div>
+    <div th:replace="~{constants/header :: header}"></div>
     <section class="hero-section" id="section_1">
         <div class="section-overlay"></div>
 
@@ -105,7 +104,8 @@
                             <li>Obtener todas las reseñas de una película por ID</li>
                         </ul>
                         <div class="copy-link-section">
-                            <a th:href="@{/api/v1/auth/register}" class="btn custom-btn ms-auto btn-api">Registrate ya!</a>
+                            <a th:href="@{/api/v1/auth/register}" class="btn custom-btn ms-auto btn-api">Registrate
+                                ya!</a>
                         </div>
                     </div>
                 </div>
@@ -134,23 +134,24 @@
     </section>
 
 </main>
-<div th:replace="constants/footer :: footer"></div>
+<div th:replace="~{constants/footer :: footer}"></div>
 
 
 <!-- JAVASCRIPT FILES -->
 
 <script>
-        function copyLink() {
-            var linkInput = document.getElementById("apiLink");
-            linkInput.select();
-            document.execCommand("copy");
-            Swal.fire({
-                icon: 'success',
-                title: 'Enlace copiado al portapapeles',
-                text: linkInput.value,
-            });
-        }
-    </script>
+    function copyLink() {
+        var linkInput = document.getElementById("apiLink");
+        linkInput.select();
+        document.execCommand("copy");
+        Swal.fire({
+            icon: 'success',
+            title: 'Enlace copiado al portapapeles',
+            text: linkInput.value,
+        });
+    }
+
+</script>
 <script>
     document.addEventListener("DOMContentLoaded", function() {
         // Obtén el botón de registro y el formulario
@@ -163,6 +164,7 @@
             formularioRegistro.style.display = (formularioRegistro.style.display === "none" || formularioRegistro.style.display === "") ? "block" : "none";
         });
     });
+
 </script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 

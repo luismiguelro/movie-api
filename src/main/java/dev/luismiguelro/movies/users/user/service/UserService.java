@@ -4,10 +4,13 @@ import dev.luismiguelro.movies.users.user.User;
 import dev.luismiguelro.movies.users.user.repository.UserRepository;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -18,11 +21,8 @@ public class UserService {
     }
 
     public List<User> allUsers() {
-        List<User> users = new ArrayList<>();
 
-        userRepository.findAll().forEach(users::add);
-
-        return users;
+        return new ArrayList<>(userRepository.findAll());
     }
     public String getAuthenticatedUserId() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

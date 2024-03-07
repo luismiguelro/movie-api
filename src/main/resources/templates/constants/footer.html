@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html xmlns:th="http://www.thymeleaf.org/">
 
 <head>
   <meta charset="utf-8">
@@ -30,7 +30,7 @@
           integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
           crossorigin="anonymous">
   </script>
-  <link href="../css/main.css" rel="stylesheet">
+  <link rel="stylesheet" th:href="@{/css/main.css}">
 </head>
 <body>
 <footer class="footer mt-auto py-3">

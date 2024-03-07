@@ -54,19 +54,31 @@ public class AuthenticationController {
             redirectAttributes.addFlashAttribute("errorMessage", "El correo electrónico ya está en uso");
         }
 
-        return "redirect:/register?exito";
+        return "redirect:/api/v1/auth/register?exito";
     }
 
-
+    @GetMapping("/login")
+    public String showLoginForm(Model model) {
+        model.addAttribute("authenticationRequest", new AuthenticationRequest());
+        return "login";
+    }
     @PostMapping("/authenticate")
-    public ResponseEntity<?> authenticate(@RequestBody AuthenticationRequest request) {
+    public String authenticate(@ModelAttribute("authenticationRequest") @Validated AuthenticationRequest request, Model model) {
         try {
-            return service.authenticate(request);
+            AuthenticationResponse responseEntity = service.authenticate(request);
+            String response = responseEntity.getToken();
+
+            // Agregar el token al modelo o flash attributes
+            model.addAttribute("token", response);
+            System.out.println(response);
+            return "home"; // Redirigir a la página de inicio después de la autenticación exitosa
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            // Si la autenticación falla, agrega un mensaje de error y vuelve a la página de inicio de sesión
+            System.out.println(e);
+            model.addAttribute("error", "Error de autenticación. Verifica tus credenciales.");
+            return "redirect:/api/v1/auth/login"; // Redirigir a la página de inicio de sesión con el mensaje de error
         }
     }
-
     public ResponseEntity<AuthenticationResponse> register(RegisterRequest registerRequest) {
         return null;
     }

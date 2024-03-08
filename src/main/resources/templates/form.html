@@ -1,0 +1,103 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org/"
+      xmlns="http://www.w3.org/1999/xhtml" lang="en" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.thymeleaf.org ">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>API de Películas con Spring Boot</title>
+    <!-- Enlazar a la fuente Google Montserrat -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap">
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+
+    <!-- Bootstrap Icons  -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.3.0/font/bootstrap-icons.css">
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.sticky/1.0.4/jquery.sticky.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+            integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r"
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.min.js"
+            integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
+            crossorigin="anonymous">
+    </script>
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+</head>
+<body>
+<div class="section">
+    <div class="container">
+        <div class="row full-height justify-content-center">
+            <div class="col-12 text-center align-self-center py-5">
+                <div class="section pb-5 pt-5 pt-sm-2 text-center">
+                    <h6 class="mb-0 pb-3"><span>Inicia Sesión </span><span>Registrate</span></h6>
+                    <input class="checkbox" type="checkbox" id="reg-log" name="reg-log"/>
+                    <label for="reg-log"></label>
+                    <div class="card-3d-wrap mx-auto">
+                        <div class="card-3d-wrapper">
+                            <div class="card-front">
+                                <!-- Log In Section -->
+                                <form th:action="@{/api/v1/auth/authenticate}" method="post" th:object="${authenticationRequest}" class="center-wrap" id="loginForm">
+                                    <div class="section text-center">
+                                        <h4 class="mb-4 pb-3">Inicia Sesión</h4>
+                                        <div class="form-group">
+                                            <input type="email" name="logemail" class="form-style" placeholder="Tu correo" id="login-email"  th:field="*{email}" autocomplete="off" required>
+                                            <i class="input-icon bi bi-at"></i>
+                                        </div>
+                                        <div class="form-group mt-2">
+                                            <input type="password" name="logpass" class="form-style" placeholder="Tu contraseña" id="login-password" th:field="*{password}" autocomplete="off" required>
+                                            <i class="input-icon bi bi-lock"></i>
+                                        </div>
+                                        <!--<p class="mb-0 mt-4 text-center"><a href="#0" class="link">Forgot your password?</a></p> -->
+                                    </div>
+                                    <button class="btn mt-4">Enviar</button>
+                                    <div id="successMessage" class="alert alert-success" style="display: none;" th:if="${param.exito}">
+                                        <p>¡Registro exitoso! Inicia sesión para continuar.</p>
+                                    </div>
+                                </form>
+
+                            </div>
+                            <div class="card-back">
+                                <form th:object="${registerRequest}" th:action="@{/api/v1/auth/register}" method="post" id="signupForm" class="center-wrap" >
+                                    <div class="section text-center">
+                                        <h4 class="mb-4 pb-3">Registrate</h4>
+                                        <div class="form-group">
+                                            <input type="text" name="logname" class="form-style" placeholder="Tu nombre" id="logname" autocomplete="off" th:field="*{firstname}" required>
+                                            <i class="input-icon bi bi-person"></i>
+                                        </div>
+                                        <div class="form-group mt-2">
+                                            <input type="text" name="logname" class="form-style" placeholder="Tu apellido" id="loglastname" autocomplete="off" th:field="*{lastname}"required >
+                                            <i class="input-icon bi bi-person"></i>
+                                        </div>
+                                        <div class="form-group mt-2">
+                                            <input type="email" name="logemail" class="form-style" placeholder="Tu correo" id="logemail" autocomplete="off"  th:field="*{email}" required>
+                                            <i class="input-icon bi bi-at"></i>
+                                        </div>
+                                        <div class="form-group mt-2">
+                                            <input type="password" name="logpass" class="form-style" placeholder="Tu contraseña" id="logpassword" th:field="*{password}" autocomplete="off" required>
+                                            <i class="input-icon ubi bi-lock"></i>
+                                        </div>
+                                    </div>
+                                    <button class="btn mt-4">Enviar</button>
+                                    <div th:if="${param.error}" class="alert alert-danger">
+                                        <p>El correo electrónico ya está en uso.</p>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+</body>
+</html>

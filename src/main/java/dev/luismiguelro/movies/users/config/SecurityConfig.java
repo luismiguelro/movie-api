@@ -37,13 +37,13 @@ public class SecurityConfig {
                         .authenticated()
                 )
                 .formLogin(login -> login
-                        .loginPage("/api/v1/auth/login")
+                        .loginPage("/login")
                         .permitAll()
                         .defaultSuccessUrl("/home") // Redirigir a /home después de una autenticación exitosa
                 )
                 .logout(logout -> logout
                         .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                        .logoutSuccessUrl("/api/v1/auth/login?logout")
+                        .logoutSuccessUrl("/login?logout")
                         .invalidateHttpSession(true)
                         .clearAuthentication(true)
                         .permitAll()

@@ -24,43 +24,40 @@ public class AuthenticationController {
     private final AuthenticationService service;
 
     @PostMapping("/register")
-    public String register(@ModelAttribute("registerRequest") @Validated RegisterRequest request, RedirectAttributes redirectAttributes, Model model) {
-
-
+    public String register(@ModelAttribute("registerRequest") @Validated RegisterRequest request, RedirectAttributes redirectAttributes) {
         try {
             ResponseEntity<AuthenticationResponse> responseEntity = ResponseEntity.ok(service.register(request));
             AuthenticationResponse response = responseEntity.getBody();
 
-            // Agregar el token al modelo o flash attributes
-            model.addAttribute("token", response.getToken());
-            // O puedes usar flash attributes
+            assert response != null;
             redirectAttributes.addFlashAttribute("token", response.getToken());
 
-            redirectAttributes.addFlashAttribute("exitoMessage", "Registro exitoso");
+            redirectAttributes.addFlashAttribute("exitoMessage", "Registro exitoso. Ahora inicia sesión!");
+            return "redirect:/login?exito";
+
         } catch (EmailAlreadyInUseException e) {
             // Manejar la excepción de correo electrónico ya en uso si es necesario
             redirectAttributes.addFlashAttribute("errorMessage", "El correo electrónico ya está en uso");
         }
 
-        return "redirect:/login?exito";
+        return "redirect:/login?error";
     }
 
-
-
     @PostMapping("/authenticate")
-    public String authenticate(@ModelAttribute("authenticationRequest") @Validated AuthenticationRequest request, Model model) {
+    public String authenticate(@ModelAttribute("authenticationRequest") @Validated AuthenticationRequest request, RedirectAttributes redirectAttributes) {
         try {
             AuthenticationResponse responseEntity = service.authenticate(request);
             String response = responseEntity.getToken();
 
-            // Agregar el token al modelo o flash attributes
-            model.addAttribute("token", response);
+
+            redirectAttributes.addFlashAttribute("token", response);
             System.out.println(response);
+
             return "home"; // Redirigir a la página de inicio después de la autenticación exitosa
         } catch (Exception e) {
             // Si la autenticación falla, agrega un mensaje de error y vuelve a la página de inicio de sesión
             System.out.println(e);
-            model.addAttribute("error", "Error de autenticación. Verifica tus credenciales.");
+            redirectAttributes.addFlashAttribute("errorMessage", "Error de autenticación. Verifica tus credenciales.");
             return "redirect:/login?error"; // Redirigir a la página de inicio de sesión con el mensaje de error
         }
     }

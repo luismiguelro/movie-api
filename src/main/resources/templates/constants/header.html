@@ -53,13 +53,13 @@
           <img src="tu_ruta_de_la_imagen/logo.png" alt="Logo">
         </div>
         -->
-        <p class="d-flex align-items-center mb-0">
+        <a th:href="@{/}" class="d-flex align-items-center mb-0" style="text-decoration: none; border-bottom: none; color: white; font: bold; ">
           <i class="bi bi-code-slash custom-icon me-2"></i>
           API de Películas con Spring Boot
-        </p>
+        </a>
       </div>
       <div class="col-lg-4 col-12 d-flex justify-content-end mt-lg-0 mt-3">
-        <a th:href="@{/api/v1/auth/register}" class="btn custom-btn btn-sm me-2" id="registroBtn">Obten tu API key</a>
+        <a th:href="@{/login}" class="btn custom-btn btn-sm me-2" id="registroBtn">Obten tu API key</a>
       </div>
     </div>
   </div>

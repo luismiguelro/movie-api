@@ -30,104 +30,118 @@
             integrity="sha384-BBtl+eGJRgqQAUMxJ7pMwbEyER4l1g+O15P+16Ep7Q9Q+zqX6gSbd85u4mG4QzX+"
             crossorigin="anonymous">
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
     <link rel="stylesheet" th:href="@{/css/main.css}">
 </head>
 <body>
-<header class="site-header fixed-top">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-8 col-12 d-flex flex-wrap align-items-center">
-                <a th:href="@{/}" class="d-flex align-items-center mb-0" style="text-decoration: none; border-bottom: none; color: white; font: bold; ">
-                    <i class="bi bi-code-slash custom-icon me-2"></i>
-                    API de Películas con Spring Boot
-                </a>
+<main>
+    <header class="site-header fixed-top">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-12 d-flex flex-wrap align-items-center">
+                    <a th:href="@{/}" class="d-flex align-items-center mb-0" style="text-decoration: none; border-bottom: none; color: white; font: bold; ">
+                        <i class="bi bi-code-slash custom-icon me-2"></i>
+                        API de Películas con Spring Boot
+                    </a>
+                </div>
             </div>
         </div>
-    </div>
-</header>
-<section class="section">
-    <div class="container">
-        <div class="row full-height justify-content-center">
-            <div class="col-12 text-center align-self-center py-5">
-                <div class="section pb-5 pt-5 pt-sm-2 text-center">
-                    <h6 class="mb-0 pb-3"><span>Inicia Sesión</span><span>Registrate</span></h6>
-                    <input class="checkbox" type="checkbox" id="reg-log" name="reg-log"/>
-                    <label for="reg-log"></label>
-                    <div class="card-3d-wrap mx-auto">
-                        <div class="card-3d-wrapper">
-                            <div class="card-front">
-                                <!-- Log In Section -->
-                                <form th:action="@{/api/v1/auth/authenticate}" method="post" th:object="${authenticationRequest}" class="center-wrap" id="loginForm">
-                                    <div class="section text-center">
-                                        <h4 class="mb-4 pb-3">Inicia Sesión</h4>
-                                        <div class="form-group">
-                                            <input type="email" name="logemail" class="form-style" placeholder="Tu correo" id="login-email"  th:field="*{email}" autocomplete="off" required>
-                                            <i class="input-icon bi bi-at"></i>
+    </header>
+    <section class="section">
+        <div class="container">
+            <div class="row full-height justify-content-center">
+                <div class="col-12 text-center align-self-center py-5">
+                    <div class="section pb-5 pt-5 pt-sm-2 text-center">
+                        <h6 class="mb-0 pb-3"><span>Inicia Sesión</span><span>Registrate</span></h6>
+                        <input class="checkbox" type="checkbox" id="reg-log" name="reg-log"/>
+                        <label for="reg-log"></label>
+                        <div class="card-3d-wrap mx-auto">
+                            <div class="card-3d-wrapper">
+                                <div class="card-front">
+                                    <!-- Log In Section -->
+                                    <form th:action="@{/api/v1/auth/authenticate}" method="post" th:object="${authenticationRequest}" class="center-wrap" id="loginForm"  onsubmit="convertirAMinusculasSubmit('login-email')">
+                                        <div class="section text-center">
+                                            <h4 class="mb-4 pb-3">Inicia Sesión</h4>
+                                            <div class="form-group">
+                                                <input type="email" name="logemail" class="form-style" placeholder="Tu correo" id="login-email"  th:field="*{email}" autocomplete="off" required>
+                                                <i class="input-icon bi bi-at"></i>
+                                            </div>
+                                            <div class="form-group mt-2">
+                                                <input type="password" name="logpass" class="form-style" placeholder="Tu contraseña" id="login-password" th:field="*{password}" autocomplete="off" required>
+                                                <i class="input-icon bi bi-lock"></i>
+                                            </div>
+                                            <!--<p class="mb-0 mt-4 text-center"><a href="#0" class="link">Forgot your password?</a></p> -->
                                         </div>
-                                        <div class="form-group mt-2">
-                                            <input type="password" name="logpass" class="form-style" placeholder="Tu contraseña" id="login-password" th:field="*{password}" autocomplete="off" required>
-                                            <i class="input-icon bi bi-lock"></i>
-                                        </div>
-                                        <!--<p class="mb-0 mt-4 text-center"><a href="#0" class="link">Forgot your password?</a></p> -->
-                                    </div>
-                                    <button class="btn mt-4">Enviar</button>
+                                        <button class="btn mt-4">Enviar</button>
 
-                                </form>
+                                    </form>
 
-                            </div>
-                            <div class="card-back">
-                                <form th:object="${registerRequest}" th:action="@{/api/v1/auth/register}" method="post" id="signupForm" class="center-wrap" onsubmit="convertirATitleCaseSubmit('logname', 'loglastname')">
-                                    <div class="section text-center">
-                                        <h4 class="mb-4 pb-3">Registrate</h4>
-                                        <div class="form-group">
-                                            <input type="text" name="logname" class="form-style" placeholder="Tu nombre" id="logname" autocomplete="off" th:field="*{firstname}" style="text-transform: capitalize;" required>
-                                            <i class="input-icon bi bi-person"></i>
+                                </div>
+                                <div class="card-back">
+                                    <form th:object="${registerRequest}" th:action="@{/api/v1/auth/register}" method="post" id="signupForm" class="center-wrap" onsubmit="convertirATitleCaseSubmit('logname', 'loglastname','logemail')" >
+                                        <div class="section text-center">
+                                            <h4 class="mb-4 pb-3">Registrate</h4>
+                                            <div class="form-group">
+                                                <input type="text" name="logname" class="form-style" placeholder="Tu nombre" id="logname" autocomplete="off" th:field="*{firstname}" style="text-transform: capitalize;" required>
+                                                <i class="input-icon bi bi-person"></i>
+                                            </div>
+                                            <div class="form-group mt-2">
+                                                <input type="text" name="logname" class="form-style" placeholder="Tu apellido" id="loglastname" autocomplete="off" th:field="*{lastname}" style="text-transform: capitalize;" required >
+                                                <i class="input-icon bi bi-person"></i>
+                                            </div>
+                                            <div class="form-group mt-2">
+                                                <input type="email" name="logemail" class="form-style" placeholder="Tu correo" id="logemail" autocomplete="off"  th:field="*{email}" required>
+                                                <i class="input-icon bi bi-at"></i>
+                                            </div>
+                                            <div class="form-group mt-2">
+                                                <input type="password" name="logpass" class="form-style" placeholder="Tu contraseña" id="logpassword" th:field="*{password}" autocomplete="off" required>
+                                                <i class="input-icon ubi bi-lock"></i>
+                                            </div>
                                         </div>
-                                        <div class="form-group mt-2">
-                                            <input type="text" name="logname" class="form-style" placeholder="Tu apellido" id="loglastname" autocomplete="off" th:field="*{lastname}" style="text-transform: capitalize;" required >
-                                            <i class="input-icon bi bi-person"></i>
-                                        </div>
-                                        <div class="form-group mt-2">
-                                            <input type="email" name="logemail" class="form-style" placeholder="Tu correo" id="logemail" autocomplete="off"  th:field="*{email}" required>
-                                            <i class="input-icon bi bi-at"></i>
-                                        </div>
-                                        <div class="form-group mt-2">
-                                            <input type="password" name="logpass" class="form-style" placeholder="Tu contraseña" id="logpassword" th:field="*{password}" autocomplete="off" required>
-                                            <i class="input-icon ubi bi-lock"></i>
-                                        </div>
-                                    </div>
-                                    <button class="btn mt-4">Enviar</button>
-                                </form>
+                                        <button class="btn mt-4">Enviar</button>
+                                    </form>
 
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div>
-                    <div th:if="${exitoMessage}" class="alert alert-success alert-dismissible fade show text-center" role="alert">
-                        <strong th:text="${exitoMessage}"></strong>
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    <div>
+                        <div th:if="${exitoMessage}" class="alert alert-success alert-dismissible fade show text-center" role="alert">
+                            <strong th:text="${exitoMessage}"></strong>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                        <div th:if="${errorMessage}" class="alert alert-warning alert-dismissible fade show text-center" role="alert">
+                            <strong th:text="${errorMessage}"></strong>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                        <div th:if="${param.logout}" class="alert alert-warning alert-dismissible fade show text-center" role="alert">
+                            <strong>Has cerrado sesión exitosamente!</strong>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
                     </div>
-                    <div th:if="${errorMessage}" class="alert alert-warning alert-dismissible fade show text-center" role="alert">
-                        <strong th:text="${errorMessage}"></strong>
-                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                    </div>
                 </div>
-            </div>
 
+            </div>
         </div>
-    </div>
-</section>
+    </section>
+</main>
+<filter>
+    <filter-name>noCacheFilter</filter-name>
+    <filter-class>com.example.NoCacheFilter</filter-class>
+</filter>
+<filter-mapping>
+    <filter-name>noCacheFilter</filter-name>
+    <url-pattern>/secured/*.jsp</url-pattern>// urls that not cached
+</filter-mapping>
 </body>
 <script>
-    function convertirATitleCaseSubmit(nameId, lastnameId) {
+    function convertirATitleCaseSubmit(nameId, lastnameId,email) {
         var nameElement = document.getElementById(nameId);
         var lastnameElement = document.getElementById(lastnameId);
+        var emailElement = document.getElementById(email);
 
       nameElement.value = convertirATitleCase(nameElement.value.trim());
-        lastnameElement.value = convertirATitleCase(lastnameElement.value.trim());
+      lastnameElement.value = convertirATitleCase(lastnameElement.value.trim());
+        emailElement.value = convertirAMinusculas(emailElement.value.trim())
     }
 
     function convertirATitleCase(inputValue) {
@@ -135,6 +149,13 @@
             return word.charAt(0).toUpperCase() + word.slice(1);
         }).join(' ');
     }
+     function convertirAMinusculasSubmit(emailId) {
+        var emailElement = document.getElementById(emailId);
+        emailElement.value = convertirAMinusculas(emailElement.value)
+     }
+    function convertirAMinusculas(inputValue) {
+    return inputValue.toLowerCase();
+}
 </script>
 
 </html>

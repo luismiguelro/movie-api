@@ -1,6 +1,8 @@
 package dev.luismiguelro.movies.home;
 import dev.luismiguelro.movies.users.auth.AuthenticationRequest;
+import dev.luismiguelro.movies.users.auth.AuthenticationResponse;
 import dev.luismiguelro.movies.users.auth.RegisterRequest;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,7 +12,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 public class IndexController {
 
     @GetMapping("/")
-    public String home() {
+    public String showIndex() {
         return "index"; // Esto buscará un archivo llamado "index.html" en la carpeta "templates"
     }
 
@@ -20,14 +22,10 @@ public class IndexController {
         model.addAttribute("registerRequest",new RegisterRequest());
         return "form";
     }
-
-
-    @ModelAttribute("authenticationRequest")
-    public AuthenticationRequest authenticationRequest() {
-        return new AuthenticationRequest();
+    @GetMapping("/home")
+    public String showHome(Model model) {
+        model.addAttribute("authenticationResponse", new AuthenticationResponse());
+        return "home";
     }
-    @ModelAttribute("registerRequest")
-    public RegisterRequest registerRequest() {
-        return new RegisterRequest();
-    }
+
 }

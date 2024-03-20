@@ -7,12 +7,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 public class IndexController {
 
     @GetMapping("/")
-    public String showIndex() {
+    public String showIndex(Model model) {
+        model.addAttribute("text", "Registrate!");
+        model.addAttribute("href", "/login");
         return "index"; // Esto buscará un archivo llamado "index.html" en la carpeta "templates"
     }
 
@@ -22,10 +25,14 @@ public class IndexController {
         model.addAttribute("registerRequest",new RegisterRequest());
         return "form";
     }
-    @GetMapping("/home")
-    public String showHome(Model model) {
-        model.addAttribute("authenticationResponse", new AuthenticationResponse());
-        return "home";
+    @ModelAttribute
+    public AuthenticationResponse authenticationResponse (){
+        return new AuthenticationResponse();
+    }
+
+    @RequestMapping("/home")
+    public String showHome() {
+        return "index";
     }
 
 }

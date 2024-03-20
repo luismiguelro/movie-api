@@ -60,13 +60,10 @@ public class AuthenticationController {
         try {
             AuthenticationResponse responseEntity = service.authenticate(request);
             String response = responseEntity.getToken();
-            /*
-            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-            ObjectId userId = new ObjectId(((User) authentication.getPrincipal()).getId());
-
-            System.out.println(userId)*/
             redirectAttributes.addFlashAttribute("token", response);
-            return "redirect:/api/v1/auth/home"; // Redirigir a la página de inicio después de la autenticación exitosa
+            redirectAttributes.addFlashAttribute("text", "Cerrar Sesion");
+            redirectAttributes.addFlashAttribute("href", "/logout");
+            return "redirect:/home";
         } catch (Exception e) {
             // Si la autenticación falla, agrega un mensaje de error y vuelve a la página de inicio de sesión
             System.out.println(e);

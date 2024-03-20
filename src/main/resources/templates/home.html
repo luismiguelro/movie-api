@@ -33,27 +33,9 @@
 </head>
 
 <body>
-<header class="site-header fixed-top">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-8 col-12 d-flex flex-wrap align-items-center">
-                <!--
-                <div class="logo me-lg-4">
-                  <img src="tu_ruta_de_la_imagen/logo.png" alt="Logo">
-                </div>
-                -->
-                <a th:href="@{/}" class="d-flex align-items-center mb-0" style="text-decoration: none; border-bottom: none; color: white; font: bold; ">
-                    <i class="bi bi-code-slash custom-icon me-2"></i>
-                    API de Películas con Spring Boot
-                </a>
-            </div>
-            <div class="col-lg-4 col-12 d-flex justify-content-end mt-lg-0 mt-3">
-                <a th:href="@{/logout}" class="btn custom-btn btn-sm me-2" id="registroBtn">Cerrar sesión</a>
-            </div>
-        </div>
-    </div>
-</header>
+
 <main>
+    <div th:replace="~{constants/header :: header}"></div>
     <section class="hero-section" id="section_1">
         <div class="section-overlay"></div>
         <div class="container d-flex justify-content-center align-items-center">

@@ -4,13 +4,10 @@ import dev.luismiguelro.movies.users.user.User;
 import dev.luismiguelro.movies.users.user.repository.UserRepository;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class UserService {
@@ -24,9 +21,11 @@ public class UserService {
 
         return new ArrayList<>(userRepository.findAll());
     }
-    public String getAuthenticatedUserId() {
+    public String authenticatedUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        // Obtener el ID del usuario autenticado
-        return ((User) authentication.getPrincipal()).getId();
+
+        User currentUser = (User) authentication.getPrincipal();
+
+        return currentUser.getFirstname();
     }
 }

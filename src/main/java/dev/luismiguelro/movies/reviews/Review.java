@@ -16,8 +16,8 @@ public class Review {
     @Id
     private ObjectId id;
     private String body;
-    private ObjectId createdBy;
-    public Review(String body, ObjectId createdBy) {
+    private String createdBy;
+    public Review(String body, String createdBy) {
         this.body = body;
         this.createdBy = createdBy;
     }

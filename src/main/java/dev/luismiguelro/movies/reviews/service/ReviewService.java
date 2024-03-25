@@ -20,27 +20,20 @@ import org.springframework.stereotype.Service;
 @AllArgsConstructor
 public class ReviewService {
 
-    @Autowired
-    private ReviewRepository reviewRepository;
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private MongoTemplate mongoTemplate;
-    @Autowired
-    private JwtService jwtService;
-    @Autowired
-    private UserService userService;
+    private final ReviewRepository reviewRepository;
+    private final UserRepository userRepository;
+    private final MongoTemplate mongoTemplate;
+    private final JwtService jwtService;
+    private final UserService userService;
 
     public Review createReview(String reviewBody, String imdbId, Authentication authentication) {
-        // Obtener el ID del usuario autenticado
-        ObjectId userId = new ObjectId(((User) authentication.getPrincipal()).getId());
+        User user = (User) authentication.getPrincipal();
+        String fullName = user.getFirstname() + " " + user.getLastname();
 
-        // Crear la revisión con el ID del usuario
         Review review = new Review();
         review.setBody(reviewBody);
-        review.setCreatedBy(userId);
+        review.setCreatedBy(fullName);
 
-        // Guardar la revisión en la base de datos
         Review insertReview = reviewRepository.insert(review);
 
         mongoTemplate.update(Movie.class)
@@ -48,7 +41,7 @@ public class ReviewService {
                 .apply(new Update().push("reviewIds").value(review))
                 .first();
         mongoTemplate.update(User.class)
-                .matching(Criteria.where("id").is(userId))
+                .matching(Criteria.where("id").is(user.getId()))
                 .apply(new Update().push("reviews").value(review))
                 .first();
         return insertReview;

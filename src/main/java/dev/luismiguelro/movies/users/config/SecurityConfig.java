@@ -40,15 +40,17 @@ public class SecurityConfig {
         httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/api/v1/auth/**", "/", "/js/**", "/css/**", "/video/**", "/home")
+                        .requestMatchers("/api/v1/auth/**", "/", "/js/**", "/css/**", "/video/**","/home")
                         .permitAll()
                         .anyRequest()
                         .authenticated()
                 )
                 .formLogin(login -> login
                         .loginPage("/login")
-                        .loginProcessingUrl("/login")
-                        .defaultSuccessUrl("/home", true)
+                        .successHandler((request, response, authentication) -> {
+                            // Personaliza la redirección después del inicio de sesión exitoso
+                            response.sendRedirect("/home");
+                        })
                         .failureUrl("/login?error")
                         .permitAll()
                 )
@@ -59,18 +61,12 @@ public class SecurityConfig {
                         .clearAuthentication(true)
                         .permitAll()
                 )
-                .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                        .maximumSessions(1)
-                        .maxSessionsPreventsLogin(true)
-                )
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(new NoCacheFilter(), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
         httpSecurity
-                .headers(headers -> headers
-                        .disable()
+                .headers(AbstractHttpConfigurer::disable
                 );
 
         return httpSecurity.build();

@@ -12,27 +12,30 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class IndexController {
 
-    @GetMapping("/")
+    @RequestMapping("/")
     public String showIndex(Model model) {
-        model.addAttribute("text", "Registrate!");
-        model.addAttribute("href", "/login");
+        model.addAttribute("loginText", "Iniciar Sesión");
+        model.addAttribute("loginHref", "/login");
+        model.addAttribute("exploreText", "Explorar");
+        model.addAttribute("registerText", "Registrarse");
         return "index"; // Esto buscará un archivo llamado "index.html" en la carpeta "templates"
     }
 
-    @GetMapping("/login")
+    @RequestMapping("/login")
     public String showLoginForm(Model model) {
         model.addAttribute("authenticationRequest", new AuthenticationRequest());
-        model.addAttribute("registerRequest",new RegisterRequest());
+        model.addAttribute("registerRequest", new RegisterRequest());
         return "form";
     }
+
     @ModelAttribute
-    public AuthenticationResponse authenticationResponse (){
+    public AuthenticationResponse authenticationResponse() {
         return new AuthenticationResponse();
     }
 
     @RequestMapping("/home")
-    public String showHome() {
-        return "index";
+    public String showHome(Model model) {
+        model.addAttribute("authenticationResponse", new AuthenticationResponse());
+        return "home";
     }
-
 }

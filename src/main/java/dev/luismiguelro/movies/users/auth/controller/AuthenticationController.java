@@ -37,8 +37,6 @@ public class AuthenticationController {
             AuthenticationResponse response = responseEntity.getBody();
 
             assert response != null;
-            redirectAttributes.addFlashAttribute("token", response.getToken());
-
             redirectAttributes.addFlashAttribute("exitoMessage", "Registro exitoso. Ahora inicia sesión!");
             return "redirect:/login?exito";
 
@@ -50,11 +48,6 @@ public class AuthenticationController {
         return "redirect:/login?error";
     }
 
-    @GetMapping("/home")
-    public String showHome(Model model) {
-        model.addAttribute("authenticationResponse", new AuthenticationResponse());
-        return "home";
-    }
     @PostMapping("/authenticate")
     public String authenticate(@ModelAttribute("authenticationRequest") @Validated AuthenticationRequest request, RedirectAttributes redirectAttributes) {
         try {
@@ -63,6 +56,7 @@ public class AuthenticationController {
             redirectAttributes.addFlashAttribute("token", response);
             redirectAttributes.addFlashAttribute("text", "Cerrar Sesion");
             redirectAttributes.addFlashAttribute("href", "/logout");
+
             return "redirect:/home";
         } catch (Exception e) {
             // Si la autenticación falla, agrega un mensaje de error y vuelve a la página de inicio de sesión

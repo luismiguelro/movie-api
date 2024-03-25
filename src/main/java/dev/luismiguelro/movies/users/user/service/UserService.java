@@ -4,6 +4,7 @@ import dev.luismiguelro.movies.users.user.User;
 import dev.luismiguelro.movies.users.user.repository.UserRepository;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -24,8 +25,20 @@ public class UserService {
     public String authenticatedUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        User currentUser = (User) authentication.getPrincipal();
+        // Check if the user is authenticated
+        if (authentication == null || !authentication.isAuthenticated() || "anonymousUser".equals(authentication.getPrincipal())) {
+            return null; // Or handle unauthenticated case as needed
+        }
 
-        return currentUser.getFirstname();
+        Object principal = authentication.getPrincipal();
+        String username;
+
+        if (principal instanceof UserDetails) {
+            username = ((UserDetails) principal).getUsername(); // Assuming username is what you want to retrieve
+        } else {
+            username = principal.toString(); // Fallback to principal's toString method
+        }
+
+        return username;
     }
 }

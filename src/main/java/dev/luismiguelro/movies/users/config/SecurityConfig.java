@@ -40,11 +40,12 @@ public class SecurityConfig {
         httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers("/api/v1/auth/**", "/", "/js/**", "/css/**", "/video/**","/home")
+                        .requestMatchers("/api/v1/auth/**", "/", "/js/**", "/css/**", "/video/**","/home","/api/v1/movies")
                         .permitAll()
                         .anyRequest()
                         .authenticated()
                 )
+                /*
                 .formLogin(login -> login
                         .loginPage("/login")
                         .successHandler((request, response, authentication) -> {
@@ -61,6 +62,8 @@ public class SecurityConfig {
                         .clearAuthentication(true)
                         .permitAll()
                 )
+
+                 */
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(new NoCacheFilter(), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);

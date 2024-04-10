@@ -25,28 +25,17 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 @Controller
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "*")
 public class AuthenticationController {
 
     private final AuthenticationService service;
     private final UserService userService;
 
     @PostMapping("/register")
-    public String register(@ModelAttribute("registerRequest") @Validated RegisterRequest request, RedirectAttributes redirectAttributes) {
-        try {
-            ResponseEntity<AuthenticationResponse> responseEntity = ResponseEntity.ok(service.register(request));
-            AuthenticationResponse response = responseEntity.getBody();
-
-            assert response != null;
-            redirectAttributes.addFlashAttribute("exitoMessage", "Registro exitoso. Ahora inicia sesión!");
-            return "redirect:/login?exito";
-
-        } catch (EmailAlreadyInUseException e) {
-            // Manejar la excepción de correo electrónico ya en uso si es necesario
-            redirectAttributes.addFlashAttribute("errorMessage", "El correo electrónico ya está en uso");
-        }
-
-        return "redirect:/login?error";
+    public ResponseEntity<AuthenticationResponse> register(@RequestBody RegisterRequest request) throws EmailAlreadyInUseException {
+        return ResponseEntity.ok(service.register(request));
     }
+
 
     @PostMapping("/authenticate")
     public String authenticate(@ModelAttribute("authenticationRequest") @Validated AuthenticationRequest request, RedirectAttributes redirectAttributes) {
@@ -64,8 +53,5 @@ public class AuthenticationController {
             redirectAttributes.addFlashAttribute("errorMessage", "Error de autenticación. Verifica tus credenciales.");
             return "redirect:/login?error"; // Redirigir a la página de inicio de sesión con el mensaje de error
         }
-    }
-    public ResponseEntity<AuthenticationResponse> register(RegisterRequest registerRequest) {
-        return null;
     }
 }

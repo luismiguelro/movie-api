@@ -32,26 +32,29 @@ public class AuthenticationController {
     private final UserService userService;
 
     @PostMapping("/register")
-    public ResponseEntity<AuthenticationResponse> register(@RequestBody RegisterRequest request) throws EmailAlreadyInUseException {
-        return ResponseEntity.ok(service.register(request));
-    }
+    public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
+        try {
+            // Intenta registrar al usuario
+            AuthenticationResponse response = service.register(request);
+            return ResponseEntity.ok(response);
+        } catch (EmailAlreadyInUseException e) {
+            // Maneja el caso cuando el correo electrónico ya está en uso
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("e-mail is in use");
+        } catch (Exception e) {
+            // Maneja otros errores
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error processing the request");
+        }
+ }
 
 
     @PostMapping("/authenticate")
-    public String authenticate(@ModelAttribute("authenticationRequest") @Validated AuthenticationRequest request, RedirectAttributes redirectAttributes) {
+    public ResponseEntity<?> authenticate(@RequestBody AuthenticationRequest request) {
         try {
-            AuthenticationResponse responseEntity = service.authenticate(request);
-            String response = responseEntity.getToken();
-            redirectAttributes.addFlashAttribute("token", response);
-            redirectAttributes.addFlashAttribute("text", "Cerrar Sesion");
-            redirectAttributes.addFlashAttribute("href", "/logout");
-
-            return "redirect:/home";
+            // Assuming service.authenticate(request) returns an AuthenticationResponse
+            AuthenticationResponse authenticationResponse = service.authenticate(request);
+            return ResponseEntity.ok(authenticationResponse);
         } catch (Exception e) {
-            // Si la autenticación falla, agrega un mensaje de error y vuelve a la página de inicio de sesión
-            System.out.println(e);
-            redirectAttributes.addFlashAttribute("errorMessage", "Error de autenticación. Verifica tus credenciales.");
-            return "redirect:/login?error"; // Redirigir a la página de inicio de sesión con el mensaje de error
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
     }
 }

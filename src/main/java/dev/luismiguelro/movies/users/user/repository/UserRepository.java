@@ -1,4 +1,4 @@
-package dev.luismiguelro.movies.users.repository;
+package dev.luismiguelro.movies.users.user.repository;
 
 import dev.luismiguelro.movies.users.user.User;
 import org.springframework.data.mongodb.repository.MongoRepository;

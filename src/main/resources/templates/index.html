@@ -45,7 +45,7 @@
 
                     <h1 class="text-white mb-5">API de Películas</h1>
 
-                    <a class="btn custom-btn" th:id="copyButton" th:attr="data-clipboard-text=${token}">Copia tu Token!</a>
+                    <a class="btn custom-btn smoothscroll" href="#section_2">Explorar</a>
                 </div>
 
                 <div class="col-lg-12 col-12 mt-auto d-flex flex-column flex-lg-row text-center">
@@ -82,29 +82,90 @@
             </video>
         </div>
     </section>
+    <section class="about-section section-padding" id="section_2">
+        <div class="container">
+            <div class="row">
 
+                <div class="col-lg-6 col-12 mb-4 mb-lg-0 d-flex align-items-center">
+                    <div class="services-info">
+                        <h2 class="text-white mb-4">Acerca de la API de Películas</h2>
+
+                        <p class="text-white">La API de Películas es desarrollada con Spring Boot y desplegada en
+                            fly.io. Permite obtener información sobre películas, detalles por ID, añadir reseñas y
+                            obtener reseñas de una película en particular. ¡Explora y disfruta!</p>
+
+                        <h6 class="text-white mt-4">Endpoints Disponibles</h6>
+
+                        <ul class="text-white">
+                            <li>Obtener todas las películas</li>
+                            <li>Obtener información de una película por ID</li>
+                            <li>Añadir una reseña a una película</li>
+                            <li>Obtener todas las reseñas de una película por ID</li>
+                        </ul>
+                        <div class="copy-link-section">
+                            <a th:href="@{/login}" class="btn custom-btn ms-auto btn-api">Registrate
+                                ya!</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-6 col-12">
+                    <div class="about-text-wrap">
+                        <img src="https://integrapersonalbranding.com.mx/wp-content/uploads/2021/02/peliculas-marca-personal-1.png"
+                             class="about-image img-fluid">
+
+                        <div class="about-text-info d-flex">
+                            <div class="d-flex">
+                                <i class="about-text-icon bi bi-film"></i>
+                            </div>
+
+                            <div class="ms-4">
+                                <h3>¡Explora el mundo del cine!</h3>
+
+                                <p class="mb-0">Tu experiencia cinematográfica extraordinaria comienza aquí.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+    <div th:replace="~{constants/footer :: footer}"></div>
 </main>
-<div th:replace="~{constants/footer :: footer}"></div>
 
 
 
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.8/clipboard.min.js"></script>
+<!-- JAVASCRIPT FILES -->
+
 <script>
-    var clipboard = new ClipboardJS('#copyButton');
-
-    clipboard.on('success', function (e) {
+    function copyLink() {
+        var linkInput = document.getElementById("apiLink");
+        linkInput.select();
+        document.execCommand("copy");
         Swal.fire({
             icon: 'success',
-            title: 'Token copiado al portapapeles',
-            text: e.text,
+            title: 'Enlace copiado al portapapeles',
+            text: linkInput.value,
+        });
+    }
+
+</script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        // Obtén el botón de registro y el formulario
+        var botonRegistro = document.querySelector("#registroBtn");
+        var formularioRegistro = document.querySelector("#registroForm");
+
+        // Agrega un evento de clic al botón de registro
+        botonRegistro.addEventListener("click", function() {
+            // Muestra u oculta el formulario según su estado actual
+            formularioRegistro.style.display = (formularioRegistro.style.display === "none" || formularioRegistro.style.display === "") ? "block" : "none";
         });
     });
 
-    clipboard.on('error', function (e) {
-        console.error('Error al intentar copiar el token', e);
-    });
 </script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 </body>
 

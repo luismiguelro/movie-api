@@ -5,10 +5,11 @@ import dev.luismiguelro.movies.users.auth.AuthenticationResponse;
 import dev.luismiguelro.movies.users.auth.RegisterRequest;
 import dev.luismiguelro.movies.users.auth.exceptions.EmailAlreadyInUseException;
 import dev.luismiguelro.movies.users.config.JwtService;
-import dev.luismiguelro.movies.users.repository.UserRepository;
+import dev.luismiguelro.movies.users.user.repository.UserRepository;
 import dev.luismiguelro.movies.users.user.Role;
 import dev.luismiguelro.movies.users.user.User;
 import lombok.RequiredArgsConstructor;
+import org.apache.tomcat.websocket.AuthenticationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -38,16 +39,15 @@ public class AuthenticationService {
         }
     }
 
-    public ResponseEntity<?> authenticate(AuthenticationRequest request) {
+    public AuthenticationResponse authenticate(AuthenticationRequest request) throws AuthenticationException {
         try {
             authenticateUser(request.getEmail(), request.getPassword());
             var user = repository.findByEmail(request.getEmail())
                     .orElseThrow(() -> new RuntimeException("User not found"));
             String jwtToken = jwtService.generateToken(user);
-            AuthenticationResponse response = buildAuthenticationResponse(jwtToken);
-            return ResponseEntity.ok(response);
+            return buildAuthenticationResponse(jwtToken);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+            throw new AuthenticationException("Error al autenticar: "+e);
         }
     }
 

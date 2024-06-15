@@ -1,10 +1,9 @@
 package dev.luismiguelro.movies.users.auth;
 
+import dev.luismiguelro.movies.users.auth.controller.AuthenticationController;
 import dev.luismiguelro.movies.users.auth.service.AuthenticationService;
-import dev.luismiguelro.movies.users.repository.UserRepository;
+import dev.luismiguelro.movies.users.user.repository.UserRepository;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.http.HttpStatus;
